@@ -20,3 +20,12 @@ Send ETH,BNB,Matic.. or any Token Offline,free,safest,Open Source,support Window
 <img src="img/25.png" width="25" height="25" >
 ...
 <br>
+
+# 1.Create transaction
+<img src="1.png"> 
+
+# 2.Sign
+<img src="2.png"> 
+
+# 3.Broadcast hash
+<img src="3.png"> 
