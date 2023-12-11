@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <style type="text/css">
+
+   #loader1 {
+    width: 200px;
+
+  }
+
+</style>
+  <!-- web resources
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  
+    <script src="js/ethereumjs-tx-1.3.3.js"></script>   
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+  --> 
+
+  <link rel="stylesheet" type="text/css" href="js/bootstrap.min.css"> 
+  <script src="js/ethereumjs-tx-1.3.3.js"></script>   
+  <script src="js/jquery-3.2.1.slim.min.js"></script>
+  <!--<script src="js/popper.min.js"></script>--> 
+  <script src="js/bootstrap.min.js"  ></script>
+  <script src="js/instascan.min.js"></script>
+  <script src="js/qrcode.min.js"></script>
+  <script src="js/web3.min.js"></script>
+  <script src="js/qcode-decoder.min.js"></script>
+  <script src="js/html5-qrcode.min.js"></script>
+
+  <title>AirWallet-Ethereum Offline wallet,Transaction Signing,generator,Cryptocurrency paper wallet offline,ETH,BNB,Matic,CRO,FTM,AVAX</title>
+
+</head>
+<body>
+
+
+  <nav class="m-2 rounded navbar navbar-expand-lg navbar-light bg-light">
+    <a class="m-2 navbar-brand" href="#">AirWallet-EVM Offline Wallet</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item ">
+          <a class="nav-link" id="CreateButtonID" href="#">1.Create Transaction </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="SignButtonID" href="#">2.Sign</a>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" id="BroadcastButtonID" href="#">3.Broadcast</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" id="HowToUseID" href="#">How to use</a>
+        </li>
+
+
+        
+      </ul>
+      
+    </div>
+  </nav>
+
+
+
+
+
+
+
+
+
+  <div id="CreateTransactionDivID" class="container mt-5">
+    <h1 class="mb-4">Etheruem Offline wallet(Ether or Token)</h1>
+    <div for="cryptoSelector">Send Ether or Token offline-using the safest method</div>
+    <br>
+    <img id="CoinLogoID" class="m-2 rounded" style="width: 30px; height: 30px;"/>
+    <label for="cryptoSelector">Select a Blockchain:</label>
+    <select id="cryptoSelector" class="form-control">
+     
+    </select>
+
+    <div class="mt-2" id="cryptoDetails">
+      <!-- Details will be displayed here -->
+    </div>
+
+
+
+    <div class="mt-2"  >
+      <form>
+        <label>
+          <input type="radio" name="color" id="SendETHid" value="SendETH" > <span id="SendETHTitle">Send ETH</span>
+        </label>
+        <label>
+          <input type="radio" name="color" id="SendTokenid" value="SendToken"> Send Token
+        </label>
+
+      </form>
+
+
+
+      <br>
+
+      
+
+    </div>
+
+    <form id="transactionForm">
+
+      <div class="mb-3">
+        <label for="fromAddress" class="form-label">From Address</label>
+        <input type="text" class="form-control" id="fromAddress" placeholder="Your Sender Address" required>
+        <span id="BalanceOfEtherID" style="color: green;"></span>
+      </div>
+
+      <div class="mb-3">
+        <label for="toAddress" class="form-label">To Address</label>
+        <input type="text" class="form-control" id="toAddress" placeholder="Recipient Address" required>
+      </div>
+
+      <div class="mb-3" id="TokenInputDivID">
+        <label for="TokenAddress" class="form-label">Token Address</label>
+        <input type="text" class="form-control" id="TokenInputID" placeholder="0x..." required>
+      </div>
+
+
+
+      <div class="mb-3">
+        <label for="amount" class="form-label">Amount</label>
+        <input type="text" class="form-control" id="amount" placeholder="Send Amount" required>
+      </div>
+
+      <!--loading gif-->
+      <div class="">
+
+       <img id="loader1"    src="loading.gif"></img>
+
+     </div>
+
+
+     <button type="button" class="btn btn-primary" onclick="CreateTransaction()">Create Transaction</button>
+   </form>
+
+   <div class="mt-4">
+    <h3>Transaction Detail:</h3>
+    <pre id="signedTransaction"></pre>
+
+    <!--<input type="text" class="form-control" txID placeholder="" >-->
+    <button class="btn btn-light" id="showCreatedTransactionQRPopupBtn">
+      <img src="img/qr.png" style="width: 30px; height: 30px;">
+    </button>
+
+
+    <button class="btn btn-light" id="copyButton" onclick="copyText()">
+      <img src="img/copy.png" style="width: 30px; height: 30px;">
+    </button>
+
+
+    
+
+
+
+    <br><br>
+
+    <textarea class="form-control" id="txID" rows="10" readonly></textarea>
+
+    <br><br>
+
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="toast-container position-fixed top-0 start-50 translate-middle-x">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      
+      <strong class="me-auto">EVM Offline Wallet</strong>
+
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body" style="color: red;">
+     This is a toast message.
+   </div>
+ </div>
+</div>
+
+
+
+<!-- QR Code Popup Modal -->
+<div class="modal" id="qrCodeModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">QR Code</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="qrcode">
+        <!-- QR code will be dynamically inserted here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal" >Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="SignDivID" class="container mt-5">
+
+
+  <label>*For the signing step, it is recommended to sign on an offline device. That is, do not connect to WIFI or any network,so that your private key remains absolutely offline.</label><br><br>
+  <h3>Private Key</h3>
+  
+  <input type="text" class="form-control" id="PrivateKeyID" placeholder="0x1133..." >
+
+  <br> <br>
+
+  <h3>Transaction Detail:</h3>
+  <br>
+  
+
+  <button type="button"  class="btn btn-light" id="scanBtn" data-bs-toggle="modal" data-bs-target="#qrModal">
+    <img src="img/camera.png" style="width: 30px; height: 30px;">
+  </button>
+
+
+
+
+
+
+  <br><br>
+  <textarea class="form-control" id="UserInputtxID" rows="10"  placeholder='{
+  "nonce": "0x...",
+  "gasPrice": "0x...",
+  "to": "0x...",
+  ......
+}' ></textarea>
+<br>
+
+<button type="button" class="btn btn-primary" onclick="signTransaction()">Sign Transaction</button>
+<br><br>
+
+
+<h3>Transaction Hash:</h3>
+
+<!-- Button for showing QR code popup -->
+
+<button class="btn btn-light" id="showQRPopupBtn">
+  <img src="img/qr.png" style="width: 30px; height: 30px;">
+</button>
+
+
+
+<br><br>
+<textarea class="form-control" id="SignedHashTextID" rows="5" readonly></textarea>
+
+<br><br>
+
+
+
+
+
+
+
+
+</div>
+
+
+
+<div id="BroadcastDivID" class="container mt-5">
+
+
+<!--
+<label  class="form-label">Signed Hash</label>
+ 
+
+<textarea class="form-control" id="UserInputSignedHashID" rows="10" ></textarea>
+
+<button type="button" class="btn btn-primary" onclick="BroadcastTransaction()">Broadcast Transaction</button>
+
+<br><br><br>
+-->
+
+<a  id="BroadcastURLID" href="#" target="_blank">BroadcastURLID</a>
+
+<div>You can also broadcast your hash by searching Google, such as: Ethereum broadcast / Polygon broadcast.</div>
+
+</div>
+
+
+
+
+
+
+<div id="HowToUseDivID" class="container mt-5">
+
+  <h3>1.Create Transaction detail</h3>
+  <img class="m-2 rounded"  src="1.png" /><br>
+
+  <h3>2.Sign transaction detail online or offline</h3>
+  <img class="m-2 rounded"  src="2.png" /><br>
+
+  <h3>3.Broadcast hash created in step 2.</h3>
+  <img class="m-2 rounded"  src="3.png" /><br>
+
+  <div> </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="container">
+  <footer class="py-3 my-4">
+   
+    <p class="text-center text-muted">Donate:0xEAc8555E83919Cedc065849b0FDc843bC03EFd4d</p>
+  </footer>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal" tabindex="-1" role="dialog" id="qrModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">QR Code Scanner</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="qr-container"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<script>
+  $("#loader1").hide();
+
+
+
+
+
+
+
+  var SendToken=false;
+  var GlobalChainID=1;
+
+  document.getElementById('SendETHid').checked = true;
+
+
+
+  document.getElementById("BroadcastURLID").href="https://etherscan.io" + "/pushTx"
+  document.getElementById("BroadcastURLID").textContent="https://etherscan.io"  + "/pushTx"
+
+
+  $("#TokenInputDivID").hide();
+
+
+//https://polygon-rpc.com
+//https://polygon.llamarpc.com
+// Set the Polygon RPC URL
+var RPCURL = 'https://eth.llamarpc.com'; // Replace with the actual Polygon RPC URL
+
+var web3 = new Web3(new Web3.providers.HttpProvider(RPCURL));
+
+
+$(document).ready(function() {
+ $("#CreateTransactionDivID").show();
+ $("#SignDivID").hide();
+ $("#BroadcastDivID").hide();
+ $("#HowToUseDivID").hide();
+
+ $("#CreateButtonID").click(function() {
+  $("#CreateTransactionDivID").show();
+  $("#SignDivID").hide();
+  $("#BroadcastDivID").hide();
+  $("#HowToUseDivID").hide();
+
+});
+
+ $("#SignButtonID").click(function() {
+  $("#CreateTransactionDivID").hide();
+  $("#SignDivID").show();
+  $("#BroadcastDivID").hide();
+  $("#HowToUseDivID").hide();
+});
+
+
+ $("#BroadcastButtonID").click(function() {
+  $("#CreateTransactionDivID").hide();
+  $("#SignDivID").hide();
+  $("#BroadcastDivID").show();
+  $("#HowToUseDivID").hide();
+
+});
+
+
+
+
+ $("#HowToUseID").click(function() {
+  $("#CreateTransactionDivID").hide();
+  $("#SignDivID").hide();
+  $("#BroadcastDivID").hide();
+  $("#HowToUseDivID").show();
+
+
+});
+
+
+
+
+   // Get all radio buttons with the name 'color'
+   const radioButtons = document.querySelectorAll('input[name="color"]');
+
+    // Add a change event listener to each radio button
+    radioButtons.forEach(radioButton => {
+      radioButton.addEventListener('change', function() {
+        // Handle the change event here
+        console.log(`Selected : ${this.value}`);
+        
+        if (this.value=="SendETH") {
+          SendToken=false;
+          $("#TokenInputDivID").hide();
+        }else if(this.value=="SendToken") {
+          SendToken=true;
+          $("#TokenInputDivID").show();
+
+        }
+        
+        console.log("SendToken:",SendToken);
+
+
+
+      });
+    });
+
+
+/*
+
+  let scanner = new Instascan.Scanner({ video: document.getElementById('video') });
+
+        // Handle QR code scanning
+        $('#scanBtn').click(function() {
+            Instascan.Camera.getCameras().then(function(cameras) {
+                if (cameras.length > 0) {
+                    scanner.start(cameras[0]);
+                } else {
+                    console.error('No cameras found.');
+                }
+            }).catch(function(e) {
+                console.error(e);
+            });
+        });
+
+        // Handle QR code scan result
+        scanner.addListener('scan', function(content) {
+            console.log('Scanned QR Code: ' + content);
+document.getElementById("UserInputtxID").value=content
+
+            scanner.stop();
+        });
+
+        */
+
+
+
+
+        // Show QR Code Popup
+        $('#showQRPopupBtn').click(function() {
+
+          document.getElementById('qrcode').innerHTML=""
+            // Generate a sample content for demonstration
+            let qrContent = 'https://example.com';
+
+            // Generate QR code and display in the modal
+            let qrcode = new QRCode(document.getElementById("qrcode"), {
+              text: document.getElementById('SignedHashTextID').value,
+              width: 400,
+              height: 400
+            });
+
+            $('#qrCodeModal').modal('show');
+          });
+
+
+        // Show QR Code Popup
+        $('#showCreatedTransactionQRPopupBtn').click(function() {
+
+          document.getElementById('qrcode').innerHTML=""
+            // Generate a sample content for demonstration
+            
+
+            // Generate QR code and display in the modal
+            let qrcode = new QRCode(document.getElementById("qrcode"), {
+              text: document.getElementById('txID').value,
+              width: 400,
+              height: 400
+            });
+
+            $('#qrCodeModal').modal('show');
+          });
+
+
+
+      });
+
+
+
+  // Change the content of the toast
+  function ShowToast(content) {
+    var toastElement = document.getElementById('liveToast');
+    var toastBody = toastElement.querySelector('.toast-body');
+
+    // Change the content of the toast body
+    toastBody.innerText = content;
+
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToast'))
+
+    toastBootstrap.show()
+
+
+
+  }
+
+
+  async function showModalTest() {
+    $('#qrModal').modal('show');
+  }
+
+
+  async function CreateTransaction() {
+
+
+
+
+
+
+   
+    console.log("Create");
+    document.getElementById('txID').value = ""
+
+
+//const fromAddress = document.getElementById('fromAddress').value;
+//const privateKey = document.getElementById('privateKey').value;
+//var toAddress = document.getElementById('toAddress').value;
+//const amount = document.getElementById('amount').value;
+
+
+if (document.getElementById('amount').value=="" &&  !Number.isFinite(document.getElementById('amount').value) ) {
+  console.log("amount is empty or not a number.");
+  ShowToast("amount is empty or not a number.")
+  return;
+}
+
+
+if (document.getElementById('fromAddress').value=="" || document.getElementById('toAddress').value==""  ) {
+  console.log("from Address or to Address is empty");
+  ShowToast("from Address or to Address is empty")
+  return;
+}
+
+
+if (SendToken && document.getElementById('TokenInputID').value == "") {
+  console.log("Token address is empty");
+
+  ShowToast("Token address is empty")
+
+  $("#loader1").hide();
+  return 
+}
+
+
+
+
+$("#loader1").show();
+
+
+
+var fromAddress = document.getElementById('fromAddress').value;
+var toAddress = document.getElementById('toAddress').value;
+
+
+
+const amount = document.getElementById('amount').value;
+
+
+
+var nonce = await web3.eth.getTransactionCount(fromAddress);
+console.log("nonce:",nonce) 
+
+            // Replace these values with your actual Ethereum address and private key
+   // var fromAddress = document.getElementById('fromAddress').value;
+   //  var fromAddress = '0x5cbc908e39cfB5EE6131D5E08c0A1045D7710D5B';
+
+
+
+   var gasPrice = await web3.eth.getGasPrice();
+   gasPrice=web3.utils.toHex(gasPrice);
+   console.log('Current Gas Price (Wei):', gasPrice);
+
+
+//,    data: '0x',
+/*
+
+  nonce: '0x00',
+  gasPrice: '0x4a817c800',    // 20000000000
+  gasLimit: '0x5208',         // 21000
+  to: '0x2890228D4478e2c3B0eBf5a38479E3396C1d6074', 
+  value: '0x2386f26fc10000',  // 0.01
+  data: null,
+  chainId: 3  //  mainnet: 1, ropsten: 3
+
+  */
+
+
+
+
+//var SendTo="0xEAc8555E83919Cedc065849b0FDc843bC03EFd4d"
+var txData=null;
+
+
+
+var rawTransaction;
+
+
+
+
+if (SendToken ) {
+
+
+
+
+
+
+
+
+  var TokenAddress=document.getElementById('TokenInputID').value
+
+//"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"
+
+//var TokenReciever="0xEAc8555E83919Cedc065849b0FDc843bC03EFd4d"
+
+// The ABI (Application Binary Interface) of the ERC-20 token contract
+const tokenContractABI = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"}]
+
+// Create a new contract instance
+const tokenContract = new web3.eth.Contract(tokenContractABI, TokenAddress);
+
+// Build the transaction data
+ //txData = tokenContract.methods.transfer(TokenReciever, web3.utils.toWei(amount)).encodeABI();
+
+
+
+//var tokenDecimals = 18; // Replace with the token's decimal value
+var tokenDecimals = await tokenContract.methods.decimals().call();
+var tokenAmount =  (amount * Math.pow(10, tokenDecimals)).toString();
+
+console.log("tokenDecimals:",tokenDecimals);
+console.log("tokenAmount:",tokenAmount);
+
+
+
+txData = web3.eth.abi.encodeFunctionCall({
+  name: 'transfer',
+  type: 'function',
+  inputs: [{
+    type: 'address',
+    name: 'to'
+  }, {
+    type: 'uint256',
+    name: 'value'
+  }]
+}, [toAddress, tokenAmount]);
+
+//web3.utils.toWei(amount)
+
+console.log("txData:",txData);
+
+// send Token
+rawTransaction = {
+  from: web3.utils.toHex(fromAddress),
+  nonce: web3.utils.toHex(nonce),
+  gasPrice: gasPrice,    // 20000000000
+//gasLimit: web3.utils.toHex(25000),         // 21000
+to: TokenAddress, 
+  //value: web3.utils.toHex(web3.utils.toWei(amount, 'ether')),  // 0.01
+  data: web3.utils.toHex(txData),
+  chainId: web3.utils.toHex(GlobalChainID)  //  mainnet: 1, ropsten: 3
+};
+
+
+}else{
+
+// send ether
+rawTransaction = {
+  from: web3.utils.toHex(fromAddress),
+  nonce: web3.utils.toHex(nonce),
+  gasPrice: gasPrice,    // 20000000000
+//gasLimit: web3.utils.toHex(25000),         // 21000
+to: toAddress, 
+  value: web3.utils.toHex(web3.utils.toWei(amount, 'ether')),  // 0.01
+  data: web3.utils.toHex(txData),
+  chainId: web3.utils.toHex(GlobalChainID)  //  mainnet: 1, ropsten: 3
+};
+
+
+}
+
+
+
+
+
+
+
+
+console.log("hex:",web3.utils.toHex(web3.utils.toWei(amount, 'ether'))) 
+
+
+var gasLimit;
+
+try {
+ gasLimit = await web3.eth.estimateGas(rawTransaction);
+} catch (error) {
+  console.log("EstimateGas error,please make sure your balance is enough.", error);
+  ShowToast("EstimateGas error,please make sure your balance is enough.")
+
+  $("#loader1").hide();
+  return;
+}
+
+
+
+gasLimit=web3.utils.toHex(gasLimit);
+console.log('Estimated Gas Limit:', gasLimit);  
+rawTransaction.gasLimit=gasLimit;
+
+
+
+//console.log("web3.utils.toWei(amount, 'ether'):",web3.utils.toWei(amount, 'ether')) 
+console.log("tx:",rawTransaction)
+//convert to readable json
+document.getElementById('txID').value = JSON.stringify(rawTransaction, null, 2);
+//return;
+
+
+$("#loader1").hide();
+
+
+}
+
+async function signTransaction() {
+
+
+  if (document.getElementById('UserInputtxID').value=="" || document.getElementById('PrivateKeyID').value=="") {
+    console.log("empty tx or private key.");
+    ShowToast("empty tx or private key.")
+    return;
+  }
+
+
+// parse back again.
+var rawTransaction = JSON.parse(document.getElementById('UserInputtxID').value);
+var privateKeyHex=document.getElementById('PrivateKeyID').value;
+// Do something with the rawTransaction object (e.g., use it for signing)
+console.log('Converted Raw Transaction:', rawTransaction);
+
+
+
+            // Initialize Ethereumjs-tx
+            var tx = new ethereumjs.Tx(rawTransaction);
+            document.getElementById('txID').value = JSON.stringify(tx, null, 2);
+
+            // Sign the transaction offline
+            var privateKey = ethereumjs.Util.toBuffer(privateKeyHex);
+            tx.sign(privateKey);
+
+            // Serialize the signed transaction
+            var serializedTx = '0x' + tx.serialize().toString('hex');
+
+            console.log("serializedTx:",serializedTx)
+            document.getElementById('SignedHashTextID').value=serializedTx
+
+
+
+
+          }
+
+
+          async    function BroadcastTransaction() {
+            if (document.getElementById('UserInputSignedHashID').value=="" ) {
+              console.log("empty Hash.");
+              ShowToast("empty Hash.")
+              return;
+            }
+
+
+            var serializedTx=document.getElementById('UserInputSignedHashID').value;
+            web3.eth.sendSignedTransaction(serializedTx)
+            .on('transactionHash', function (hash) {
+              console.log('Transaction Hash: ' + hash);
+                    //console.log('Transaction Hash: ' + hash);
+                  })
+            .on('receipt', function (receipt) {
+              console.log('Transaction Receipt:', receipt);
+              console.log('Transaction Receipt: ' + JSON.stringify(receipt));
+            })
+            .on('error', function (error) {
+              console.error('Transaction Error:', error);
+              console.log('Transaction Error: ' + JSON.stringify(error));
+            });
+          }
+
+
+
+
+
+
+//https://eth.llamarpc.com
+
+var CoinsJson=
+{
+  "Ethereum": {
+    "symbol": "ETH",
+    "chainid": 1,
+    "RPCURL": "https://eth.drpc.org",
+    "BroadcastTransaction": "",
+    "BlockExplorer": "https://etherscan.io"
+  },
+  "Binance": {
+    "symbol": "BNB",
+    "chainid": 56,
+    "RPCURL": "https://bsc-dataseed1.binance.org:443",
+    "BroadcastTransaction": "https://bscscan.com/pushTx",
+    "BlockExplorer": "https://bscscan.com"
+  },
+  "Fantom": {
+    "symbol": "FTM",
+    "chainid": 250,
+    "RPCURL": "https://rpc.ankr.com/fantom",
+    "BroadcastTransaction": "https://ftmscan.com/pushTx",
+    "BlockExplorer": "https://ftmscan.com"
+  },
+  "Polygon": {
+    "symbol": "MATIC",
+    "chainid": 137,
+    "RPCURL": "https://polygon.llamarpc.com",
+    "BroadcastTransaction": "https://polygonscan.com/pushTx",
+    "BlockExplorer": "https://polygonscan.com"
+  },
+  "Avalanche": {
+    "symbol": "AVAX",
+    "chainid": 43114,
+    "RPCURL": "https://api.avax.network/ext/bc/C/rpc",
+    "BroadcastTransaction": "https://snowtrace.io/pushTx",
+    "BlockExplorer": "https://subnets.avax.network/c-chain"
+  },
+  "Cronos": {
+    "symbol": "CRO",
+    "chainid": 25,
+    "RPCURL": "https://evm.cronos.org",
+    "BroadcastTransaction": "https://cronoscan.com/pushTx",
+    "BlockExplorer": "https://cronoscan.com"
+  }
+}
+
+
+var selector = $("#cryptoSelector");
+$.each(CoinsJson, function(key, value) {
+  selector.append('<option value="' + key + '">' + key + '</option>');
+});
+
+// Set the default value for the selector
+var defaultCrypto = "Ethereum";
+document.getElementById("CoinLogoID").src= "img/ETH.png"
+selector.val(defaultCrypto);
+
+// Trigger the change event to display details for the default value
+selector.trigger('change');
+
+
+
+
+
+  // Handle selector change event
+  selector.on('change', function() {
+    var selectedCrypto = $(this).val();
+    var detailsContainer = $("#cryptoDetails");
+
+    if (selectedCrypto) {
+      var selectedCryptoDetails = CoinsJson[selectedCrypto];
+      document.getElementById("CoinLogoID").src= "img/"+ selectedCryptoDetails.symbol + ".png"
+      document.getElementById("SendETHTitle").innerHTML="Send " + selectedCryptoDetails.symbol
+
+      GlobalChainID=selectedCryptoDetails.chainid;
+      web3 = new Web3(new Web3.providers.HttpProvider(selectedCryptoDetails.RPCURL));
+
+      console.log("GlobalChainID:",GlobalChainID)
+
+      document.getElementById("BroadcastURLID").href=selectedCryptoDetails.BlockExplorer + "/pushTx"
+      document.getElementById("BroadcastURLID").textContent=selectedCryptoDetails.BlockExplorer + "/pushTx"
+
+       //selectedCryptoDetails.symbol
+     } else {
+      detailsContainer.html('');
+    }
+  });
+
+
+
+//detect fromAddressInput
+var fromAddressInput = document.getElementById("fromAddress");
+var timeoutId;
+
+fromAddressInput.addEventListener("input", function() {
+    // Clear the previous timer
+    clearTimeout(timeoutId);
+
+    // Set a new timer to wait for 3 seconds
+    timeoutId = setTimeout(function() {
+      // This function will be executed after 3 seconds of inactivity
+      console.log("Input value changed after 3 seconds:", fromAddressInput.value);
+      // Call your function here
+      
+
+      var ethAddress=   document.getElementById("fromAddress").value
+      // Get the balance in wei
+      web3.eth.getBalance(ethAddress, (error, balanceWei) => {
+        if (!error) {
+    // Convert balance to Ether
+    const balanceEther = web3.utils.fromWei(balanceWei, 'ether');
+
+    document.getElementById("BalanceOfEtherID").innerHTML="Balance:" + balanceEther
+    console.log(`Balance of ${ethAddress}: ${balanceEther} ETH`);
+  } else {
+    console.error(error);
+  }
+});
+
+
+
+    }, 2000);
+  });
+
+
+
+
+
+function copyText() {
+  /* Get the text field */
+  var textarea = document.getElementById("txID");
+
+  /* Select the text field */
+  textarea.select();
+  textarea.setSelectionRange(0, 99999); /* For mobile devices */
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+
+  /* Alert the copied text */
+            //alert("Copied the text: " + textarea.value);
+          }
+
+
+
+
+
+
+
+// Initialize the QR code scanner
+const html5QrCode = new Html5Qrcode("qr-container");
+
+    // Success callback function
+    const qrCodeSuccessCallback = qrCodeMessage => {
+      // Handle the QR code data as needed
+      console.log("QR Code detected: ", qrCodeMessage);
+      document.getElementById("UserInputtxID").value=qrCodeMessage
+      html5QrCode.stop();
+      $('#qrModal').modal('hide');
+
+
+      // You can add your logic to use the QR code data here
+    };
+
+    // Trigger the scanner when the modal is shown
+    $("#qrModal").on("shown.bs.modal", function() {
+      html5QrCode.start(
+        { facingMode: "environment" }, // You can adjust this configuration
+        { fps: 10, qrbox: 250 },
+        qrCodeSuccessCallback
+        );
+    });
+
+    // Stop the scanner when the modal is closed
+    $("#qrModal").on("hidden.bs.modal", function() {
+      html5QrCode.stop();
+    });
+
+
+  </script>
+
+
+</body>
+</html>
+
+
+
+
