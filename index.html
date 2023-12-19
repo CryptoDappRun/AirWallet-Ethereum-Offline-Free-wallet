@@ -95,6 +95,12 @@
         </li>
 
 
+        <li class="nav-item">
+          <a class="nav-link" id="HowToUseID" href="https://github.com/CryptoDappRun/Cryptocurrency-Paper-Wallet-Generator" target="_blank">Paper Wallet Generator</a>
+        </li>
+
+
+
         
       </ul>
       
@@ -262,6 +268,8 @@
   <h3>Private Key</h3>
   
   <input type="text" class="form-control" id="PrivateKeyID" placeholder="0x1133..." >
+  <button type="button"  class="btn btn-secondary m-2"  onclick="togglePassword()">Show/Hide</button>
+
 
   <br> <br>
 
@@ -1071,6 +1079,26 @@ const html5QrCode = new Html5Qrcode("qr-container");
     $("#qrModal").on("hidden.bs.modal", function() {
       html5QrCode.stop();
     });
+
+
+
+
+
+
+function togglePassword() {
+            var passwordInput = document.getElementById('PrivateKeyID');
+
+            // Check if the input type is password
+            if (passwordInput.type === 'password') {
+                // Change the input type to text and display the actual value
+                passwordInput.type = 'text';
+            } else {
+                // Change the input type back to password to mask the value
+                passwordInput.type = 'password';
+            }
+        }
+
+
 
 
   </script>
