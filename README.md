@@ -1,4 +1,4 @@
-# AirWallet-Ethereum-Offline-Free-wallet
+# AirWallet-Ethereum-Offline-Free-Cold-Wallet
 Send ETH,BNB,Matic.. or any Token Offline,free,safest,Open Source,support Windows,Mac OS,IOS,android..
 
 ``*Free``<br>
